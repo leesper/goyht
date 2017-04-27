@@ -1,2 +1,2 @@
 # goyht
-Golang SDK for YunHeTong(http://sdk.yunhetong.com/)
+Golang SDK for [YunHeTong](http://sdk.yunhetong.com/)
