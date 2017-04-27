@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -83,8 +84,13 @@ func (c *Client) AddUser(p AddUserParam) (*AddUserResponse, error) {
 	return rsp, nil
 }
 
+// AsyncNotifyResult represents the result returned from YunHeTong service.
+type AsyncNotifyResult struct{}
+
 // AsyncNotify returns asynchronous notification from YunHeTong service.
-func (c *Client) AsyncNotify() {}
+func (c *Client) AsyncNotify(req *http.Request) (*AsyncNotifyResult, error) {
+	return nil, errors.New("not defined")
+}
 
 func (c *Client) doHTTPRequest(uri string, paramMap map[string]string) ([]byte, error) {
 	if token, ok := paramMap["token"]; ok {
