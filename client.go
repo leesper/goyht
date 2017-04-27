@@ -61,7 +61,7 @@ func NewClient(cfg Config) *Client {
 }
 
 // AddUser imports user into YunHeTong service.
-func (c *Client) AddUser(p AddUserParam) (*AddUserResponse, error) {
+func (c *Client) AddUser(p AddUserParams) (*AddUserResponse, error) {
 	paramMap, err := toMap(p)
 	if err != nil {
 		return nil, err
