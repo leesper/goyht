@@ -1,6 +1,6 @@
 package goyht
 
-// AddUserParam represents paramters for /userInfo/addUser.
+// AddUserParams represents paramters for /userInfo/addUser.
 type AddUserParams struct {
 	AppUserID       string `param:"appUserId"`
 	CellNum         string `param:"cellNum"`
@@ -58,55 +58,145 @@ type ModifyUserNameResponse struct {
 }
 
 // UserTokenParams represents paramters for /token/getToken.
-type UserTokenParams struct{}
+type UserTokenParams struct {
+	AppUserID string `param:"appUserId"`
+}
 
 // UserTokenResponse represents the reponse returned.
-type UserTokenResponse struct{}
+type UserTokenResponse struct {
+	Code    string `json:"code"`
+	SubCode string `json:"subCode"`
+	Message string `json:"message"`
+	Value   struct {
+		Token string `json:"token"`
+	} `json:"value"`
+}
 
 // CreateTemplateContractParams represents paramters for /contract/templateContract?
-type CreateTemplateContractParams struct{}
+type CreateTemplateContractParams struct {
+	Title         string `param:"title"`
+	DefContractNo string `param:"defContractNo"`
+	TemplateID    string `param:"templateId"`
+	UseCer        string `param:"useCer"`
+	Param         string `param:"param"`
+}
 
 // CreateTemplateContractResponse represents the reponse returned.
-type CreateTemplateContractResponse struct{}
+type CreateTemplateContractResponse struct {
+	Code    string `json:"code"`
+	SubCode string `json:"subCode"`
+	Message string `json:"message"`
+	Value   struct {
+		ContractID string `json:"contractId"`
+	} `json:"value"`
+}
 
 // CreateFileContractParams represents paramters for /contract/fileContract
-type CreateFileContractParams struct{}
+type CreateFileContractParams struct {
+	Title         string `param:"title"`
+	DefContractNo string `param:"defContractNo"`
+	TemplateID    string `param:"templateId"`
+	UseCer        string `param:"useCer"`
+	File          []byte `param:"file"`
+}
 
 // CreateFileContractResponse represents the reponse returned.
-type CreateFileContractResponse struct{}
+type CreateFileContractResponse struct {
+	Code    string `json:"code"`
+	SubCode string `json:"subCode"`
+	Message string `json:"message"`
+	Value   struct {
+		ContractID string `json:"contractId"`
+	} `json:"value"`
+}
 
 // AddPartnerParams represents paramters for /contract/addPartner
-type AddPartnerParams struct{}
+type AddPartnerParams struct {
+	ContractID string `param:"contractId"`
+	Partners   string `param:"partners"`
+}
 
 // AddPartnerResponse represents the reponse returned.
-type AddPartnerResponse struct{}
+type AddPartnerResponse struct {
+	Code    string `json:"code"`
+	SubCode string `json:"subCode"`
+	Message string `json:"message"`
+}
 
 // SignContractParams represents paramters for /contract/signContract
-type SignContractParams struct{}
+type SignContractParams struct {
+	ContractID string `param:"contractId"`
+	Signer     string `param:"signer"`
+}
 
 // SignContractResponse represents the reponse returned.
-type SignContractResponse struct{}
+type SignContractResponse struct {
+	Code    string `json:"code"`
+	SubCode string `json:"subCode"`
+	Message string `json:"message"`
+}
 
 // InvalidateContractParams represents paramters for /contract/invalid
-type InvalidateContractParams struct{}
+type InvalidateContractParams struct {
+	ContractID string `param:"contractId"`
+}
 
 // InvalidateContractResponse represents the reponse returned.
-type InvalidateContractResponse struct{}
+type InvalidateContractResponse struct {
+	Code    string `json:"code"`
+	SubCode string `json:"subCode"`
+	Message string `json:"message"`
+}
 
 // ListContractsParams represents paramters for /contract/list
-type ListContractsParams struct{}
+type ListContractsParams struct {
+	PageNum  string `param:"pageNum"`
+	PageSize string `param:"pageSize"`
+}
 
 // ListContractsResponse represents the reponse returned.
-type ListContractsResponse struct{}
+type ListContractsResponse struct {
+	Code    string `json:"code"`
+	SubCode string `json:"subCode"`
+	Message string `json:"message"`
+	Value   struct {
+		ContractList []struct {
+			ID          string `json:"id"`
+			Title       string `json:"title"`
+			Status      string `json:"status"`
+			AppName     string `json:"appName"`
+			GmtModify   string `json:"gmtModify"`
+			PartnerList string `json:"partnerList"`
+		} `json:"contractList"`
+	} `json:"value"`
+}
 
 // LookupContractDetailParams represents paramters for /contract/detail
-type LookupContractDetailParams struct{}
+type LookupContractDetailParams struct {
+	ContractID string `param:"contractId"`
+}
 
 // LookupContractDetailResponse represents the reponse returned.
-type LookupContractDetailResponse struct{}
+type LookupContractDetailResponse struct {
+	Code    string `json:"code"`
+	SubCode string `json:"subCode"`
+	Message string `json:"message"`
+	Value   struct {
+		PartnerList []struct {
+			SignStatus string `json:"signStatus"`
+			UserID     string `json:"userId"`
+		} `json:"partnerList"`
+		Title  string `param:"title"`
+		Status string `json:"status"`
+	} `json:"value"`
+}
 
 // DownloadContractParams represents paramters for /contract/download
-type DownloadContractParams struct{}
+type DownloadContractParams struct {
+	ContractID string `param:"contractId"`
+}
 
 // DownloadContractResponse represents the reponse returned.
-type DownloadContractResponse struct{}
+type DownloadContractResponse struct {
+	File []byte
+}
