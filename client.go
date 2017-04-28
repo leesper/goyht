@@ -304,11 +304,80 @@ func (c *Client) CreateFileContract(title, contractNo, token string, useCer bool
 	return rsp, nil
 }
 
+// Partner represents a participant in a contract.
+type Partner struct {
+	AppUserID    string `json:"appUserId"`
+	LocationName string `json:"locationName,omitempty"` // 模板签名占位符名称(与keyWord必填其一)
+	Keyword      string `json:"keyWord,omitempty"`
+}
+
 // AddPartner adds partners of contract.
-func (c *Client) AddPartner() {}
+func (c *Client) AddPartner(contractID, token string, partners ...Partner) (*AddPartnerResponse, error) {
+	data, err := json.Marshal(partners)
+	if err != nil {
+		return nil, err
+	}
+
+	p := addPartnerParams{
+		ContractID: contractID,
+		Partners:   string(data),
+	}
+
+	paramMap, err := toMap(p, map[string]string{
+		"token": token,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	ret, err := httpRequest(c, p.URI(), paramMap, nil, func() interface{} {
+		return &AddPartnerResponse{}
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	rsp := ret.(*AddPartnerResponse)
+	if err = checkErr(rsp.Code, rsp.SubCode, rsp.Message); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
 
 // SignContract signs contract automatically.
-func (c *Client) SignContract() {}
+func (c *Client) SignContract(contractID, token string, signers ...string) (*SignContractResponse, error) {
+	data, err := json.Marshal(signers)
+	if err != nil {
+		return nil, err
+	}
+
+	p := signContractParams{
+		ContractID: contractID,
+		Signer:     string(data),
+	}
+
+	paramMap, err := toMap(p, map[string]string{
+		"token": token,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	ret, err := httpRequest(c, p.URI(), paramMap, nil, func() interface{} {
+		return &SignContractResponse{}
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	rsp := ret.(*SignContractResponse)
+	if err = checkErr(rsp.Code, rsp.SubCode, rsp.Message); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
 
 // InvalidateContract invalidates contract.
 func (c *Client) InvalidateContract() {}

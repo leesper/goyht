@@ -114,14 +114,12 @@ type CreateFileContractResponse struct {
 	} `json:"value"`
 }
 
-// AddPartnerParams represents paramters for /contract/addPartner
-type AddPartnerParams struct {
+type addPartnerParams struct {
 	ContractID string `param:"contractId"`
 	Partners   string `param:"partners"`
 }
 
-// URI returns the URL of API.
-func (p AddPartnerParams) URI() string {
+func (p addPartnerParams) URI() string {
 	return "/contract/addPartner"
 }
 
@@ -132,14 +130,12 @@ type AddPartnerResponse struct {
 	Message string `json:"message"`
 }
 
-// SignContractParams represents paramters for /contract/signContract
-type SignContractParams struct {
+type signContractParams struct {
 	ContractID string `param:"contractId"`
 	Signer     string `param:"signer"`
 }
 
-// URI returns the URL of API.
-func (p SignContractParams) URI() string {
+func (p signContractParams) URI() string {
 	return "/contract/signContract"
 }
 
