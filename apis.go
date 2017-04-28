@@ -1,12 +1,6 @@
 package goyht
 
-// Params is the interface for all API parameters.
-type Params interface {
-	URI() string
-}
-
-// AddUserParams represents paramters for /userInfo/addUser.
-type AddUserParams struct {
+type addUserParams struct {
 	AppUserID       string `param:"appUserId"`
 	CellNum         string `param:"cellNum"`
 	UserType        string `param:"userType"`
@@ -16,8 +10,7 @@ type AddUserParams struct {
 	CreateSignature string `param:"createSignature"`
 }
 
-// URI returns the URL of API.
-func (p AddUserParams) URI() string {
+func (p addUserParams) URI() string {
 	return "/userInfo/addUser"
 }
 
@@ -28,13 +21,12 @@ type AddUserResponse struct {
 	Message string `json:"message"`
 }
 
-// ModifyPhoneNumberParams represents paramters for /userInfo/modifyCellNum.
-type ModifyPhoneNumberParams struct {
+type modifyPhoneNumberParams struct {
 	CellNum string `param:"cellNum"`
 }
 
 // URI returns the URL of API.
-func (p ModifyPhoneNumberParams) URI() string {
+func (p modifyPhoneNumberParams) URI() string {
 	return "/userInfo/modifyCellNum"
 }
 
@@ -45,13 +37,12 @@ type ModifyPhoneNumberResponse struct {
 	Message string `json:"message"`
 }
 
-// ModifyUserNameParams represents paramters for /userInfo/modifyUserName.
-type ModifyUserNameParams struct {
-	CellNum string `param:"cellNum"`
+type modifyUserNameParams struct {
+	UserName        string `json:"userName"`
+	CreateSignature string `json:"createSignature"`
 }
 
-// URI returns the URL of API.
-func (p ModifyUserNameParams) URI() string {
+func (p modifyUserNameParams) URI() string {
 	return "/userInfo/modifyUserName"
 }
 
@@ -62,13 +53,11 @@ type ModifyUserNameResponse struct {
 	Message string `json:"message"`
 }
 
-// UserTokenParams represents paramters for /token/getToken.
-type UserTokenParams struct {
+type userTokenParams struct {
 	AppUserID string `param:"appUserId"`
 }
 
-// URI returns the URL of API.
-func (p UserTokenParams) URI() string {
+func (p userTokenParams) URI() string {
 	return "/token/getToken"
 }
 
@@ -82,8 +71,7 @@ type UserTokenResponse struct {
 	} `json:"value"`
 }
 
-// CreateTemplateContractParams represents paramters for /contract/templateContract
-type CreateTemplateContractParams struct {
+type createTemplateContractParams struct {
 	Title         string `param:"title"`
 	DefContractNo string `param:"defContractNo"`
 	TemplateID    string `param:"templateId"`
@@ -92,7 +80,7 @@ type CreateTemplateContractParams struct {
 }
 
 // URI returns the URL of API.
-func (p CreateTemplateContractParams) URI() string {
+func (p createTemplateContractParams) URI() string {
 	return "/contract/templateContract"
 }
 
@@ -106,17 +94,13 @@ type CreateTemplateContractResponse struct {
 	} `json:"value"`
 }
 
-// CreateFileContractParams represents paramters for /contract/fileContract
-type CreateFileContractParams struct {
+type createFileContractParams struct {
 	Title         string `param:"title"`
 	DefContractNo string `param:"defContractNo"`
-	TemplateID    string `param:"templateId"`
 	UseCer        string `param:"useCer"`
-	File          []byte `param:"file"`
 }
 
-// URI returns the URL of API.
-func (p CreateFileContractParams) URI() string {
+func (p createFileContractParams) URI() string {
 	return "/contract/fileContract"
 }
 
