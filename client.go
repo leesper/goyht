@@ -380,10 +380,61 @@ func (c *Client) SignContract(contractID, token string, signers ...string) (*Sig
 }
 
 // InvalidateContract invalidates contract.
-func (c *Client) InvalidateContract() {}
+func (c *Client) InvalidateContract(contractID, token string) (*InvalidateContractResponse, error) {
+	p := invalidateContractParams{
+		ContractID: contractID,
+	}
+
+	paramMap, err := toMap(p, map[string]string{
+		"token": token,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	ret, err := httpRequest(c, p.URI(), paramMap, nil, func() interface{} {
+		return &InvalidateContractResponse{}
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	rsp := ret.(*InvalidateContractResponse)
+	if err = checkErr(rsp.Code, rsp.SubCode, rsp.Message); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
 
 // ListContracts returns a list of contracts finished or invalidated.
-func (c *Client) ListContracts() {}
+func (c *Client) ListContracts(pageNum, pageSize int, token string) (*ListContractsResponse, error) {
+	p := listContractsParams{
+		PageNum:  fmt.Sprintf("%d", pageNum),
+		PageSize: fmt.Sprintf("%d", pageSize),
+	}
+
+	paramMap, err := toMap(p, map[string]string{
+		"token": token,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	ret, err := httpRequest(c, p.URI(), paramMap, nil, func() interface{} {
+		return &ListContractsResponse{}
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	rsp := ret.(*ListContractsResponse)
+	if err = checkErr(rsp.Code, rsp.SubCode, rsp.Message); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
 
 // LookupContractDetail returns the detail of a contract.
 func (c *Client) LookupContractDetail() {}

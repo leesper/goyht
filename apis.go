@@ -146,13 +146,11 @@ type SignContractResponse struct {
 	Message string `json:"message"`
 }
 
-// InvalidateContractParams represents paramters for /contract/invalid
-type InvalidateContractParams struct {
+type invalidateContractParams struct {
 	ContractID string `param:"contractId"`
 }
 
-// URI returns the URL of API.
-func (p InvalidateContractParams) URI() string {
+func (p invalidateContractParams) URI() string {
 	return "/contract/invalid"
 }
 
@@ -163,14 +161,12 @@ type InvalidateContractResponse struct {
 	Message string `json:"message"`
 }
 
-// ListContractsParams represents paramters for /contract/list
-type ListContractsParams struct {
+type listContractsParams struct {
 	PageNum  string `param:"pageNum"`
 	PageSize string `param:"pageSize"`
 }
 
-// URI returns the URL of API.
-func (p ListContractsParams) URI() string {
+func (p listContractsParams) URI() string {
 	return "/contract/list"
 }
 
