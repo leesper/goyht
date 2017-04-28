@@ -66,6 +66,8 @@ func (c *Client) AddUser(p AddUserParams) (*AddUserResponse, error) {
 	if err != nil {
 		return nil, err
 	}
+	paramMap[AppIDKey] = c.config.AppID
+	paramMap[PasswordKey] = c.config.Password
 
 	data, err := c.doHTTPRequest(p.URI(), paramMap)
 	if err != nil {
@@ -84,6 +86,39 @@ func (c *Client) AddUser(p AddUserParams) (*AddUserResponse, error) {
 	return rsp, nil
 }
 
+// ModifyPhoneNumber modifies user's cell phone number.
+func (c *Client) ModifyPhoneNumber() {}
+
+// ModifyUserName modifies user's name.
+func (c *Client) ModifyUserName() {}
+
+// UserToken gets user's token string.
+func (c *Client) UserToken() {}
+
+// CreateTemplateContract creates contract based on template.
+func (c *Client) CreateTemplateContract() {}
+
+// CreateFileContract creates contract by uploading file.
+func (c *Client) CreateFileContract() {}
+
+// AddPartner adds partners of contract.
+func (c *Client) AddPartner() {}
+
+// SignContract signs contract automatically.
+func (c *Client) SignContract() {}
+
+// InvalidateContract invalidates contract.
+func (c *Client) InvalidateContract() {}
+
+// ListContracts returns a list of contracts finished or invalidated.
+func (c *Client) ListContracts() {}
+
+// LookupContractDetail returns the detail of a contract.
+func (c *Client) LookupContractDetail() {}
+
+// DownloadContract downloads a contract.
+func (c *Client) DownloadContract() {}
+
 // AsyncNotifyResult represents the result returned from YunHeTong service.
 type AsyncNotifyResult struct{}
 
@@ -97,8 +132,6 @@ func (c *Client) doHTTPRequest(uri string, paramMap map[string]string) ([]byte, 
 		delete(paramMap, "token")
 		uri = fmt.Sprintf("%s?token=%s", uri, token)
 	}
-	paramMap[AppIDKey] = c.config.AppID
-	paramMap[PasswordKey] = c.config.Password
 
 	formData := url.Values{}
 	for k, v := range paramMap {

@@ -62,6 +62,11 @@ type UserTokenParams struct {
 	AppUserID string `param:"appUserId"`
 }
 
+// URI returns the URL of API.
+func (p UserTokenParams) URI() string {
+	return "/token/getToken"
+}
+
 // UserTokenResponse represents the reponse returned.
 type UserTokenResponse struct {
 	Code    string `json:"code"`
@@ -72,13 +77,18 @@ type UserTokenResponse struct {
 	} `json:"value"`
 }
 
-// CreateTemplateContractParams represents paramters for /contract/templateContract?
+// CreateTemplateContractParams represents paramters for /contract/templateContract
 type CreateTemplateContractParams struct {
 	Title         string `param:"title"`
 	DefContractNo string `param:"defContractNo"`
 	TemplateID    string `param:"templateId"`
 	UseCer        string `param:"useCer"`
 	Param         string `param:"param"`
+}
+
+// URI returns the URL of API.
+func (p CreateTemplateContractParams) URI() string {
+	return "/contract/templateContract"
 }
 
 // CreateTemplateContractResponse represents the reponse returned.
@@ -100,6 +110,11 @@ type CreateFileContractParams struct {
 	File          []byte `param:"file"`
 }
 
+// URI returns the URL of API.
+func (p CreateFileContractParams) URI() string {
+	return "/contract/fileContract"
+}
+
 // CreateFileContractResponse represents the reponse returned.
 type CreateFileContractResponse struct {
 	Code    string `json:"code"`
@@ -116,6 +131,11 @@ type AddPartnerParams struct {
 	Partners   string `param:"partners"`
 }
 
+// URI returns the URL of API.
+func (p AddPartnerParams) URI() string {
+	return "/contract/addPartner"
+}
+
 // AddPartnerResponse represents the reponse returned.
 type AddPartnerResponse struct {
 	Code    string `json:"code"`
@@ -127,6 +147,11 @@ type AddPartnerResponse struct {
 type SignContractParams struct {
 	ContractID string `param:"contractId"`
 	Signer     string `param:"signer"`
+}
+
+// URI returns the URL of API.
+func (p SignContractParams) URI() string {
+	return "/contract/signContract"
 }
 
 // SignContractResponse represents the reponse returned.
@@ -141,6 +166,11 @@ type InvalidateContractParams struct {
 	ContractID string `param:"contractId"`
 }
 
+// URI returns the URL of API.
+func (p InvalidateContractParams) URI() string {
+	return "/contract/invalid"
+}
+
 // InvalidateContractResponse represents the reponse returned.
 type InvalidateContractResponse struct {
 	Code    string `json:"code"`
@@ -152,6 +182,11 @@ type InvalidateContractResponse struct {
 type ListContractsParams struct {
 	PageNum  string `param:"pageNum"`
 	PageSize string `param:"pageSize"`
+}
+
+// URI returns the URL of API.
+func (p ListContractsParams) URI() string {
+	return "/contract/list"
 }
 
 // ListContractsResponse represents the reponse returned.
@@ -176,6 +211,11 @@ type LookupContractDetailParams struct {
 	ContractID string `param:"contractId"`
 }
 
+// URI returns the URL of API.
+func (p LookupContractDetailParams) URI() string {
+	return "/contract/detail"
+}
+
 // LookupContractDetailResponse represents the reponse returned.
 type LookupContractDetailResponse struct {
 	Code    string `json:"code"`
@@ -194,6 +234,11 @@ type LookupContractDetailResponse struct {
 // DownloadContractParams represents paramters for /contract/download
 type DownloadContractParams struct {
 	ContractID string `param:"contractId"`
+}
+
+// URI returns the URL of API.
+func (p DownloadContractParams) URI() string {
+	return "/contract/download"
 }
 
 // DownloadContractResponse represents the reponse returned.
