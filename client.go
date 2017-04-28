@@ -60,40 +60,121 @@ func NewClient(cfg Config) *Client {
 	}
 }
 
-// AddUser imports user into YunHeTong service.
-func (c *Client) AddUser(p AddUserParams) (*AddUserResponse, error) {
-	paramMap, err := toMap(p)
-	if err != nil {
-		return nil, err
-	}
-	paramMap[AppIDKey] = c.config.AppID
-	paramMap[PasswordKey] = c.config.Password
-
+func httpRequest(c *Client, p Params, paramMap map[string]string, factory func() interface{}) (interface{}, error) {
 	data, err := c.doHTTPRequest(p.URI(), paramMap)
 	if err != nil {
 		return nil, err
 	}
 
-	rsp := &AddUserResponse{}
+	rsp := factory()
 	if err = json.NewDecoder(bytes.NewReader(data)).Decode(rsp); err != nil {
 		return nil, err
 	}
 
-	if rsp.Code != "200" || rsp.SubCode != "200" {
-		return nil, fmt.Errorf("code %s subcode %s msg %s", rsp.Code, rsp.SubCode, rsp.Message)
+	return rsp, nil
+}
+
+// AddUser imports user into YunHeTong service.
+func (c *Client) AddUser(p AddUserParams) (*AddUserResponse, error) {
+	paramMap, err := toMap(p, map[string]string{
+		AppIDKey:    c.config.AppID,
+		PasswordKey: c.config.Password,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	ret, err := httpRequest(c, p, paramMap, func() interface{} {
+		return &AddUserResponse{}
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	rsp := ret.(*AddUserResponse)
+
+	if err = checkErr(rsp.Code, rsp.SubCode, rsp.Message); err != nil {
+		return nil, err
 	}
 
 	return rsp, nil
 }
 
 // ModifyPhoneNumber modifies user's cell phone number.
-func (c *Client) ModifyPhoneNumber() {}
+func (c *Client) ModifyPhoneNumber(p ModifyPhoneNumberParams) (*ModifyPhoneNumberResponse, error) {
+	paramMap, err := toMap(p, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	ret, err := httpRequest(c, p, paramMap, func() interface{} {
+		return &ModifyPhoneNumberResponse{}
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	rsp := ret.(*ModifyPhoneNumberResponse)
+
+	if err = checkErr(rsp.Code, rsp.SubCode, rsp.Message); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
 
 // ModifyUserName modifies user's name.
-func (c *Client) ModifyUserName() {}
+func (c *Client) ModifyUserName(p ModifyUserNameParams) (*ModifyUserNameResponse, error) {
+	paramMap, err := toMap(p, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	ret, err := httpRequest(c, p, paramMap, func() interface{} {
+		return &ModifyUserNameResponse{}
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	rsp := ret.(*ModifyUserNameResponse)
+
+	if err = checkErr(rsp.Code, rsp.SubCode, rsp.Message); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
 
 // UserToken gets user's token string.
-func (c *Client) UserToken() {}
+func (c *Client) UserToken(p UserTokenParams) (*UserTokenResponse, error) {
+	paramMap, err := toMap(p, map[string]string{
+		AppIDKey:    c.config.AppID,
+		PasswordKey: c.config.Password,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	ret, err := httpRequest(c, p, paramMap, func() interface{} {
+		return &UserTokenResponse{}
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	rsp := ret.(*UserTokenResponse)
+
+	if err = checkErr(rsp.Code, rsp.SubCode, rsp.Message); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
 
 // CreateTemplateContract creates contract based on template.
 func (c *Client) CreateTemplateContract() {}

@@ -1,5 +1,10 @@
 package goyht
 
+// Params is the interface for all API parameters.
+type Params interface {
+	URI() string
+}
+
 // AddUserParams represents paramters for /userInfo/addUser.
 type AddUserParams struct {
 	AppUserID       string `param:"appUserId"`

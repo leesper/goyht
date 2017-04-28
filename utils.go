@@ -5,7 +5,7 @@ import (
 	"reflect"
 )
 
-func toMap(st interface{}) (map[string]string, error) {
+func toMap(st interface{}, extras map[string]string) (map[string]string, error) {
 	val := reflect.ValueOf(st)
 	if val.Kind() == reflect.Ptr {
 		val = val.Elem()
@@ -24,5 +24,17 @@ func toMap(st interface{}) (map[string]string, error) {
 			result[tag] = val.Field(i).String()
 		}
 	}
+
+	for k, v := range extras {
+		result[k] = v
+	}
 	return result, nil
+}
+
+func checkErr(code, subcode, message string) error {
+	const success = "200"
+	if code != success || subcode != success {
+		return fmt.Errorf("code %s subcode %s msg %s", code, subcode, message)
+	}
+	return nil
 }
