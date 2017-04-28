@@ -187,13 +187,11 @@ type ListContractsResponse struct {
 	} `json:"value"`
 }
 
-// LookupContractDetailParams represents paramters for /contract/detail
-type LookupContractDetailParams struct {
+type lookupContractDetailParams struct {
 	ContractID string `param:"contractId"`
 }
 
-// URI returns the URL of API.
-func (p LookupContractDetailParams) URI() string {
+func (p lookupContractDetailParams) URI() string {
 	return "/contract/detail"
 }
 

@@ -437,7 +437,32 @@ func (c *Client) ListContracts(pageNum, pageSize int, token string) (*ListContra
 }
 
 // LookupContractDetail returns the detail of a contract.
-func (c *Client) LookupContractDetail() {}
+func (c *Client) LookupContractDetail(contractID, token string) (*LookupContractDetailResponse, error) {
+	p := lookupContractDetailParams{
+		ContractID: contractID,
+	}
+
+	paramMap, err := toMap(p, map[string]string{
+		"token": token,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	ret, err := httpRequest(c, p.URI(), paramMap, nil, func() interface{} {
+		return &LookupContractDetailResponse{}
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	rsp := ret.(*LookupContractDetailResponse)
+	if err = checkErr(rsp.Code, rsp.SubCode, rsp.Message); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
 
 // DownloadContract downloads a contract.
 func (c *Client) DownloadContract() {}
