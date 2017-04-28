@@ -210,13 +210,11 @@ type LookupContractDetailResponse struct {
 	} `json:"value"`
 }
 
-// DownloadContractParams represents paramters for /contract/download
-type DownloadContractParams struct {
+type downloadContractParams struct {
 	ContractID string `param:"contractId"`
 }
 
-// URI returns the URL of API.
-func (p DownloadContractParams) URI() string {
+func (p downloadContractParams) URI() string {
 	return "/contract/download"
 }
 

@@ -465,7 +465,41 @@ func (c *Client) LookupContractDetail(contractID, token string) (*LookupContract
 }
 
 // DownloadContract downloads a contract.
-func (c *Client) DownloadContract() {}
+func (c *Client) DownloadContract(contractID, token string) ([]byte, error) {
+	p := downloadContractParams{
+		ContractID: contractID,
+	}
+
+	paramMap, err := toMap(p, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	vals := url.Values{}
+	for k, v := range paramMap {
+		vals.Add(k, v)
+	}
+
+	uri := fmt.Sprintf("%s?token=%s", p.URI(), token)
+	apiURL := fmt.Sprintf("%s%s", c.config.APIGateway, uri)
+	req, err := http.NewRequest(http.MethodGet, apiURL, strings.NewReader(vals.Encode()))
+	if err != nil {
+		return nil, err
+	}
+
+	rsp, err := c.tlsClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer rsp.Body.Close()
+
+	data, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
+}
 
 // AsyncNotifyResult represents the result returned from YunHeTong service.
 type AsyncNotifyResult struct{}
