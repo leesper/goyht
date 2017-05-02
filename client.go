@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/tls"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"mime/multipart"
@@ -502,11 +501,34 @@ func (c *Client) DownloadContract(contractID, token string) ([]byte, error) {
 }
 
 // AsyncNotifyResult represents the result returned from YunHeTong service.
-type AsyncNotifyResult struct{}
+type AsyncNotifyResult struct {
+	Content      string            `json:"content"`
+	NoticeType   string            `json:"noticeType"`
+	NoticeParams string            `json:"noticeParams"`
+	InfoMap      map[string]string `json:"map"`
+}
 
 // AsyncNotify returns asynchronous notification from YunHeTong service.
 func (c *Client) AsyncNotify(req *http.Request) (*AsyncNotifyResult, error) {
-	return nil, errors.New("not defined")
+	defer req.Body.Close()
+	result := &AsyncNotifyResult{}
+	if err := json.NewDecoder(req.Body).Decode(result); err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
+// AnswerAsyncNotify returns a json string answering async notification.
+func (c *Client) AnswerAsyncNotify(rsp bool, msg string) string {
+	ret := map[string]interface{}{
+		"response": rsp,
+		"msg":      msg,
+	}
+	data, err := json.Marshal(ret)
+	if err != nil {
+		return ""
+	}
+	return string(data)
 }
 
 func (c *Client) doMultipartRequest(uri string, paramMap map[string]string, fileData []byte) ([]byte, error) {
