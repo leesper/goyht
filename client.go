@@ -15,27 +15,21 @@ import (
 // M is a convenient alias for a map[string]interface{} map.
 type M map[string]interface{}
 
-// UserType is a type for user types.
-type UserType int
-
 // constants about user types.
 const (
-	UserTypePersonal   UserType = 1 // 个人
-	UserTypeEnterprise UserType = 2 // 企业
-	UserTypePlatform   UserType = 4 // 平台
+	UserTypePersonal   = "1" // 个人
+	UserTypeEnterprise = "2" // 企业
+	UserTypePlatform   = "4" // 平台
 )
-
-// CertType is a type for certification types.
-type CertType int
 
 // constants about certification types.
 const (
-	CertTypeIDCard   CertType = 1 // 身份证
-	CertTypePassport CertType = 2 // 护照
-	CertTypeOfficer  CertType = 3 // 军官证
-	CertTypeLicence  CertType = 4 // 营业执照
-	CertTypeOrgan    CertType = 5 // 组织机构代码
-	CertTypeSocial   CertType = 6 // 社会代码
+	CertTypeIDCard   = "1" // 身份证
+	CertTypePassport = "2" // 护照
+	CertTypeOfficer  = "3" // 军官证
+	CertTypeLicence  = "4" // 营业执照
+	CertTypeOrgan    = "5" // 组织机构代码
+	CertTypeSocial   = "6" // 社会代码
 )
 
 // constants for url and keys
@@ -92,7 +86,7 @@ func httpRequest(c *Client, uri string, paramMap map[string]string, fileData []b
 }
 
 // AddUser imports user into YunHeTong service.
-func (c *Client) AddUser(userID, phone, name, certNum string, userType UserType, certType CertType, autoSign bool) (*AddUserResponse, error) {
+func (c *Client) AddUser(userID, phone, name, certNum string, userType string, certType string, autoSign bool) (*AddUserResponse, error) {
 	var createSign string
 	if autoSign {
 		createSign = "1"
@@ -100,9 +94,9 @@ func (c *Client) AddUser(userID, phone, name, certNum string, userType UserType,
 	p := addUserParams{
 		AppUserID:       userID,
 		CellNum:         phone,
-		UserType:        fmt.Sprintf("%d", userType),
+		UserType:        userType,
 		UserName:        name,
-		CertifyType:     fmt.Sprintf("%d", certType),
+		CertifyType:     certType,
 		CertifyNumber:   certNum,
 		CreateSignature: createSign,
 	}
