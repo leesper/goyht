@@ -16,8 +16,8 @@ func (p addUserParams) URI() string {
 
 // AddUserResponse represents the reponse returned.
 type AddUserResponse struct {
-	Code    string `json:"code"`
-	SubCode string `json:"subCode"`
+	Code    int    `json:"code"`
+	SubCode int    `json:"subCode"`
 	Message string `json:"message"`
 }
 
@@ -32,8 +32,8 @@ func (p modifyPhoneNumberParams) URI() string {
 
 // ModifyPhoneNumberResponse represents the reponse returned.
 type ModifyPhoneNumberResponse struct {
-	Code    string `json:"code"`
-	SubCode string `json:"subCode"`
+	Code    int    `json:"code"`
+	SubCode int    `json:"subCode"`
 	Message string `json:"message"`
 }
 
@@ -48,8 +48,8 @@ func (p modifyUserNameParams) URI() string {
 
 // ModifyUserNameResponse represents the reponse returned.
 type ModifyUserNameResponse struct {
-	Code    string `json:"code"`
-	SubCode string `json:"subCode"`
+	Code    int    `json:"code"`
+	SubCode int    `json:"subCode"`
 	Message string `json:"message"`
 }
 
@@ -63,8 +63,8 @@ func (p userTokenParams) URI() string {
 
 // UserTokenResponse represents the reponse returned.
 type UserTokenResponse struct {
-	Code    string `json:"code"`
-	SubCode string `json:"subCode"`
+	Code    int    `json:"code"`
+	SubCode int    `json:"subCode"`
 	Message string `json:"message"`
 	Value   struct {
 		Token string `json:"token"`
@@ -86,11 +86,11 @@ func (p createTemplateContractParams) URI() string {
 
 // CreateTemplateContractResponse represents the reponse returned.
 type CreateTemplateContractResponse struct {
-	Code    string `json:"code"`
-	SubCode string `json:"subCode"`
+	Code    int    `json:"code"`
+	SubCode int    `json:"subCode"`
 	Message string `json:"message"`
 	Value   struct {
-		ContractID string `json:"contractId"`
+		ContractID int64 `json:"contractId"`
 	} `json:"value"`
 }
 
@@ -106,8 +106,8 @@ func (p createFileContractParams) URI() string {
 
 // CreateFileContractResponse represents the reponse returned.
 type CreateFileContractResponse struct {
-	Code    string `json:"code"`
-	SubCode string `json:"subCode"`
+	Code    int    `json:"code"`
+	SubCode int    `json:"subCode"`
 	Message string `json:"message"`
 	Value   struct {
 		ContractID string `json:"contractId"`
@@ -125,8 +125,8 @@ func (p addPartnerParams) URI() string {
 
 // AddPartnerResponse represents the reponse returned.
 type AddPartnerResponse struct {
-	Code    string `json:"code"`
-	SubCode string `json:"subCode"`
+	Code    int    `json:"code"`
+	SubCode int    `json:"subCode"`
 	Message string `json:"message"`
 }
 
@@ -141,8 +141,8 @@ func (p signContractParams) URI() string {
 
 // SignContractResponse represents the reponse returned.
 type SignContractResponse struct {
-	Code    string `json:"code"`
-	SubCode string `json:"subCode"`
+	Code    int    `json:"code"`
+	SubCode int    `json:"subCode"`
 	Message string `json:"message"`
 }
 
@@ -156,8 +156,8 @@ func (p invalidateContractParams) URI() string {
 
 // InvalidateContractResponse represents the reponse returned.
 type InvalidateContractResponse struct {
-	Code    string `json:"code"`
-	SubCode string `json:"subCode"`
+	Code    int    `json:"code"`
+	SubCode int    `json:"subCode"`
 	Message string `json:"message"`
 }
 
@@ -172,8 +172,8 @@ func (p listContractsParams) URI() string {
 
 // ListContractsResponse represents the reponse returned.
 type ListContractsResponse struct {
-	Code    string `json:"code"`
-	SubCode string `json:"subCode"`
+	Code    int    `json:"code"`
+	SubCode int    `json:"subCode"`
 	Message string `json:"message"`
 	Value   struct {
 		ContractList []struct {
@@ -197,8 +197,8 @@ func (p lookupContractDetailParams) URI() string {
 
 // LookupContractDetailResponse represents the reponse returned.
 type LookupContractDetailResponse struct {
-	Code    string `json:"code"`
-	SubCode string `json:"subCode"`
+	Code    int    `json:"code"`
+	SubCode int    `json:"subCode"`
 	Message string `json:"message"`
 	Value   struct {
 		PartnerList []struct {

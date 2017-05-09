@@ -31,10 +31,10 @@ func toMap(st interface{}, extras map[string]string) (map[string]string, error) 
 	return result, nil
 }
 
-func checkErr(code, subcode, message string) error {
-	const success = "200"
+func checkErr(code, subcode int, message string) error {
+	const success = 200
 	if code != success || subcode != success {
-		return fmt.Errorf("code %s subcode %s msg %s", code, subcode, message)
+		return fmt.Errorf("code %d subcode %d msg %s", code, subcode, message)
 	}
 	return nil
 }

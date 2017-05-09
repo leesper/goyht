@@ -36,7 +36,7 @@ const (
 const (
 	YHTAPIGateway = "https://sdk.yunhetong.com/sdk"
 	AppIDKey      = "appId"
-	PasswordKey   = "passWord"
+	PasswordKey   = "password"
 )
 
 // Config contains configurations about YunHeTong service.
@@ -87,7 +87,7 @@ func httpRequest(c *Client, uri string, paramMap map[string]string, fileData []b
 
 // AddUser imports user into YunHeTong service.
 func (c *Client) AddUser(userID, phone, name, certNum string, userType string, certType string, autoSign bool) (*AddUserResponse, error) {
-	var createSign string
+	createSign := "0"
 	if autoSign {
 		createSign = "1"
 	}
@@ -305,14 +305,14 @@ type Partner struct {
 }
 
 // AddPartner adds partners of contract.
-func (c *Client) AddPartner(contractID, token string, partners ...Partner) (*AddPartnerResponse, error) {
+func (c *Client) AddPartner(contractID int64, token string, partners ...Partner) (*AddPartnerResponse, error) {
 	data, err := json.Marshal(partners)
 	if err != nil {
 		return nil, err
 	}
 
 	p := addPartnerParams{
-		ContractID: contractID,
+		ContractID: fmt.Sprintf("%d", contractID),
 		Partners:   string(data),
 	}
 
