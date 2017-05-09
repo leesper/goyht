@@ -54,40 +54,18 @@ func TestCreateContractFromTemplate(t *testing.T) {
 		"${paystay}":          1,
 		"${date}":             fmt.Sprintf("%d-%02d-%02d", beginY, beginM, beginD),
 	}
-	tRsp, err := cli.CreateTemplateContract("合同", "testContract123", "82288", tokRsp.Value.Token, false, holder)
+	tRsp, err := cli.CreateTemplateContract("合同", "testContract123", "92130", tokRsp.Value.Token, false, holder)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	fmt.Println("contract", tRsp.Value.ContractID)
-	partnerA := Partner{AppUserID: "testUserID1", LocationName: "${lessor}"}
-	partnerB := Partner{AppUserID: "testUserID2", LocationName: "${lessee}"}
+	partnerA := Partner{AppUserID: "testUserID1", LocationName: "56006"}
+	partnerB := Partner{AppUserID: "testUserID2", LocationName: "02289"}
 	_, err = cli.AddPartner(tRsp.Value.ContractID, tokRsp.Value.Token, partnerA, partnerB)
 	if err != nil {
-		t.Fatal(err)
+		_, err = cli.AddPartner(tRsp.Value.ContractID, tokRsp.Value.Token, partnerA, partnerB)
+		if err != nil {
+			t.Fatal(err)
+		}
 	}
 }
-
-// func TestAddUser(t *testing.T) {}
-//
-// func TestModifyPhoneNumber(t *testing.T) {}
-//
-// func TestModifyUserName(t *testing.T) {}
-//
-// func TestUserToken(t *testing.T) {}
-//
-// func TestCreateTemplateContract(t *testing.T) {}
-//
-// func TestCreateFileContract(t *testing.T) {}
-//
-// func TestAddPartner(t *testing.T) {}
-//
-// func TestSignContract(t *testing.T) {}
-//
-// func TestInvalidateContract(t *testing.T) {}
-//
-// func TestListContracts(t *testing.T) {}
-//
-// func TestLookupContractDetail(t *testing.T) {}
-//
-// func TestDownloadContract(t *testing.T) {}
