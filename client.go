@@ -551,7 +551,7 @@ func (c *Client) doMultipartRequest(uri string, paramMap map[string]string, file
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
 
 	rsp, err := c.tlsClient.Do(req)
 	if err != nil {
@@ -583,7 +583,7 @@ func (c *Client) doHTTPRequest(uri string, paramMap map[string]string) ([]byte, 
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
 
 	rsp, err := c.tlsClient.Do(req)
 	if err != nil {
