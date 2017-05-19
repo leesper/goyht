@@ -480,6 +480,7 @@ func (c *Client) DownloadContract(contractID, token string) ([]byte, error) {
 		return nil, err
 	}
 
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
 	rsp, err := c.tlsClient.Do(req)
 	if err != nil {
 		return nil, err
