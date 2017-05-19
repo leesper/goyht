@@ -473,9 +473,9 @@ func (c *Client) DownloadContract(contractID, token string) ([]byte, error) {
 		vals.Add(k, v)
 	}
 
-	uri := fmt.Sprintf("%s?token=%s", p.URI(), token)
+	uri := fmt.Sprintf("%s?token=%s&contractId=%s", p.URI(), token, contractID)
 	apiURL := fmt.Sprintf("%s%s", c.config.APIGateway, uri)
-	req, err := http.NewRequest(http.MethodGet, apiURL, strings.NewReader(vals.Encode()))
+	req, err := http.NewRequest(http.MethodGet, apiURL, nil)
 	if err != nil {
 		return nil, err
 	}
