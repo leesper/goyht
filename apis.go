@@ -1,5 +1,25 @@
 package goyht
 
+type authParams struct {
+	IDNo   string `param:"idNo"`
+	IDName string `param:"idName"`
+}
+
+func (p authParams) URI() string {
+	return "/authentic/authentication"
+}
+
+// AuthResponse represents the response returned.
+type AuthResponse struct {
+	Code    int    `json:"code"`
+	Message string `json:"msg"`
+	Success bool   `json:"success"`
+	Data    struct {
+		Status  string `json:"status"`
+		IDPhoto string `json:"id_photo"`
+	} `json:"data"`
+}
+
 type addUserParams struct {
 	AppUserID       string `param:"appUserId"`
 	CellNum         string `param:"cellNum"`

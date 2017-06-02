@@ -7,7 +7,7 @@ import (
 )
 
 func TestCreateContractFromTemplate(t *testing.T) {
-	// t.SkipNow()
+	t.SkipNow()
 	cli := NewClient(Config{
 		AppID:      "2017042710231700001",
 		Password:   "qiaoyu001",

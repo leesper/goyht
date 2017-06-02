@@ -38,3 +38,10 @@ func checkErr(code, subcode int, message string) error {
 	}
 	return nil
 }
+
+func checkAuthErr(code int, message string, success bool) error {
+	if !success || code != 200 {
+		return fmt.Errorf("code %d message %s success %t", code, message, success)
+	}
+	return nil
+}

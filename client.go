@@ -34,16 +34,18 @@ const (
 
 // constants for url and keys
 const (
-	YHTAPIGateway = "https://sdk.yunhetong.com/sdk"
-	AppIDKey      = "appId"
-	PasswordKey   = "password"
+	YHTAPIGateway  = "https://sdk.yunhetong.com/sdk"
+	YHTAuthGateway = "https://authentic.yunhetong.com"
+	AppIDKey       = "appId"
+	PasswordKey    = "password"
 )
 
 // Config contains configurations about YunHeTong service.
 type Config struct {
-	AppID      string
-	Password   string
-	APIGateway string
+	AppID       string
+	Password    string
+	APIGateway  string
+	AuthGateway string
 }
 
 // Client handles all APIs for YunHeTong service.
@@ -79,6 +81,44 @@ func httpRequest(c *Client, uri string, paramMap map[string]string, fileData []b
 
 	rsp := factory()
 	if err = json.NewDecoder(bytes.NewReader(data)).Decode(rsp); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+// AuthIDCard authenticates ID card number and name via YunHeTong service.
+func (c *Client) AuthIDCard(idNum, idName string, portrait bool) (*AuthResponse, error) {
+	reqType := "1"
+	if portrait {
+		reqType = "2"
+	}
+	p := authParams{
+		IDNo:   idNum,
+		IDName: idName,
+	}
+
+	paramMap, err := toMap(p, map[string]string{
+		"key":            c.config.AppID,
+		"value":          c.config.Password,
+		"rcaRequestType": reqType,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	ret, err := httpRequest(c, p.URI(), paramMap, nil, func() interface{} {
+		return &AuthResponse{}
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	rsp := ret.(*AuthResponse)
+
+	if err = checkAuthErr(rsp.Code, rsp.Message, rsp.Success); err != nil {
 		return nil, err
 	}
 
@@ -574,6 +614,9 @@ func (c *Client) doHTTPRequest(uri string, paramMap map[string]string) ([]byte, 
 		uri = fmt.Sprintf("%s?token=%s", uri, token)
 	}
 	apiURL := fmt.Sprintf("%s%s", c.config.APIGateway, uri)
+	if strings.Contains(uri, "/authentic/authentication") {
+		apiURL = fmt.Sprintf("%s%s", c.config.AuthGateway, uri)
+	}
 
 	formData := url.Values{}
 	for k, v := range paramMap {
