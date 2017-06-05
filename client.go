@@ -45,6 +45,8 @@ type Config struct {
 	AppID       string
 	Password    string
 	APIGateway  string
+	AuthID      string
+	AuthPWD     string
 	AuthGateway string
 }
 
@@ -66,27 +68,6 @@ func NewClient(cfg Config) *Client {
 	}
 }
 
-func httpRequest(c *Client, uri string, paramMap map[string]string, fileData []byte, factory func() interface{}) (interface{}, error) {
-	var data []byte
-	var err error
-	if fileData != nil {
-		data, err = c.doMultipartRequest(uri, paramMap, fileData)
-	} else {
-		data, err = c.doHTTPRequest(uri, paramMap)
-	}
-
-	if err != nil {
-		return nil, err
-	}
-
-	rsp := factory()
-	if err = json.NewDecoder(bytes.NewReader(data)).Decode(rsp); err != nil {
-		return nil, err
-	}
-
-	return rsp, nil
-}
-
 // AuthIDCard authenticates ID card number and name via YunHeTong service.
 func (c *Client) AuthIDCard(idNum, idName string, portrait bool) (*AuthResponse, error) {
 	reqType := "1"
@@ -99,8 +80,8 @@ func (c *Client) AuthIDCard(idNum, idName string, portrait bool) (*AuthResponse,
 	}
 
 	paramMap, err := toMap(p, map[string]string{
-		"key":            c.config.AppID,
-		"value":          c.config.Password,
+		"key":            c.config.AuthID,
+		"value":          c.config.AuthPWD,
 		"rcaRequestType": reqType,
 	})
 
@@ -566,13 +547,38 @@ func (c *Client) AnswerAsyncNotify(rsp bool, msg string) string {
 	return string(data)
 }
 
-func (c *Client) doMultipartRequest(uri string, paramMap map[string]string, fileData []byte) ([]byte, error) {
+func httpRequest(c *Client, uri string, paramMap map[string]string, fileData []byte, factory func() interface{}) (interface{}, error) {
 	if token, ok := paramMap["token"]; ok {
 		delete(paramMap, "token")
 		uri = fmt.Sprintf("%s?token=%s", uri, token)
 	}
 	apiURL := fmt.Sprintf("%s%s", c.config.APIGateway, uri)
+	if strings.Contains(uri, "authentication") {
+		apiURL = fmt.Sprintf("%s%s", c.config.AuthGateway, uri)
+	}
+	fmt.Println("API URL", apiURL)
 
+	var data []byte
+	var err error
+	if fileData != nil {
+		data, err = c.doMultipartRequest(apiURL, paramMap, fileData)
+	} else {
+		data, err = c.doHTTPRequest(apiURL, paramMap)
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	rsp := factory()
+	if err = json.NewDecoder(bytes.NewReader(data)).Decode(rsp); err != nil {
+		return nil, err
+	}
+
+	return rsp, nil
+}
+
+func (c *Client) doMultipartRequest(apiURL string, paramMap map[string]string, fileData []byte) ([]byte, error) {
 	buf := &bytes.Buffer{}
 	writer := multipart.NewWriter(buf)
 	for k, v := range paramMap {
@@ -608,20 +614,13 @@ func (c *Client) doMultipartRequest(uri string, paramMap map[string]string, file
 	return data, nil
 }
 
-func (c *Client) doHTTPRequest(uri string, paramMap map[string]string) ([]byte, error) {
-	if token, ok := paramMap["token"]; ok {
-		delete(paramMap, "token")
-		uri = fmt.Sprintf("%s?token=%s", uri, token)
-	}
-	apiURL := fmt.Sprintf("%s%s", c.config.APIGateway, uri)
-	if strings.Contains(uri, "/authentic/authentication") {
-		apiURL = fmt.Sprintf("%s%s", c.config.AuthGateway, uri)
-	}
-
+func (c *Client) doHTTPRequest(apiURL string, paramMap map[string]string) ([]byte, error) {
 	formData := url.Values{}
 	for k, v := range paramMap {
 		formData.Add(k, v)
 	}
+
+	fmt.Println(formData.Encode())
 
 	req, err := http.NewRequest(http.MethodPost, apiURL, strings.NewReader(formData.Encode()))
 	if err != nil {

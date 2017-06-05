@@ -6,12 +6,31 @@ import (
 	"time"
 )
 
+func TestAuthIDCard(t *testing.T) {
+	cli := NewClient(Config{
+		AppID:       "XXX",
+		Password:    "YYY",
+		APIGateway:  YHTAPIGateway,
+		AuthID:      "4502d72d02604fbdbcc41f488a760e98",
+		AuthPWD:     "d72a39c0e8ca4cb1a831a05e9c699b9a",
+		AuthGateway: YHTAuthGateway,
+	})
+	rsp, err := cli.AuthIDCard("520103198712312831", "李科君", false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(rsp.Data)
+}
+
 func TestCreateContractFromTemplate(t *testing.T) {
 	t.SkipNow()
 	cli := NewClient(Config{
-		AppID:      "2017042710231700001",
-		Password:   "qiaoyu001",
-		APIGateway: YHTAPIGateway,
+		AppID:       "XXX",
+		Password:    "YYY",
+		APIGateway:  YHTAPIGateway,
+		AuthID:      "4502d72d02604fbdbcc41f488a760e98",
+		AuthPWD:     "d72a39c0e8ca4cb1a831a05e9c699b9a",
+		AuthGateway: YHTAuthGateway,
 	})
 	cli.AddUser("testUserID1", "15928009057", "香樟有限公司", "915201903470159141", UserTypeEnterprise, CertTypeLicence, true)
 
