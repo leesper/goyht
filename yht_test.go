@@ -6,23 +6,7 @@ import (
 	"time"
 )
 
-func TestAuthIDCard(t *testing.T) {
-	cli := NewClient(Config{
-		AppID:       "XXX",
-		Password:    "YYY",
-		APIGateway:  YHTAPIGateway,
-		AuthID:      "4502d72d02604fbdbcc41f488a760e98",
-		AuthPWD:     "d72a39c0e8ca4cb1a831a05e9c699b9a",
-		AuthGateway: YHTAuthGateway,
-	})
-	rsp, err := cli.AuthIDCard("520103198712312831", "李科君", false)
-	if err != nil {
-		t.Fatal(err)
-	}
-	fmt.Println(rsp.Data)
-}
-
-func TestCreateContractFromTemplate(t *testing.T) {
+func TestAuthRealName(t *testing.T) {
 	t.SkipNow()
 	cli := NewClient(Config{
 		AppID:       "XXX",
@@ -32,9 +16,44 @@ func TestCreateContractFromTemplate(t *testing.T) {
 		AuthPWD:     "d72a39c0e8ca4cb1a831a05e9c699b9a",
 		AuthGateway: YHTAuthGateway,
 	})
-	cli.AddUser("testUserID1", "15928009057", "香樟有限公司", "915201903470159141", UserTypeEnterprise, CertTypeLicence, true)
+	rsp, err := cli.AuthRealName("520103198712312831", "李科君", false)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(rsp.Data)
+}
 
-	_, err := cli.AddUser("testUserID2", "15928009058", "王二", "520103198801011430", UserTypePersonal, CertTypeIDCard, false)
+func TestAuthRealNameBank(t *testing.T) {
+	t.SkipNow()
+
+	cli := NewClient(Config{
+		AppID:       "XXX",
+		Password:    "YYY",
+		APIGateway:  YHTAPIGateway,
+		AuthID:      "ZZZ",
+		AuthPWD:     "ZZZ",
+		AuthGateway: YHTAuthGateway,
+	})
+	rsp, err := cli.AuthRealNameBank("123456", "Jack", "456789", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(rsp)
+}
+
+func TestCreateContractFromTemplate(t *testing.T) {
+	t.SkipNow()
+	cli := NewClient(Config{
+		AppID:       "XXX",
+		Password:    "YYY",
+		APIGateway:  YHTAPIGateway,
+		AuthID:      "ZZZ",
+		AuthPWD:     "ZZZ",
+		AuthGateway: YHTAuthGateway,
+	})
+	cli.AddUser("testUserID1", "15928009057", "company", "915201903470159141", UserTypeEnterprise, CertTypeLicence, true)
+
+	_, err := cli.AddUser("testUserID2", "15928009058", "Mike", "520103198801011430", UserTypePersonal, CertTypeIDCard, false)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -49,14 +68,14 @@ func TestCreateContractFromTemplate(t *testing.T) {
 	beginY, beginM, beginD := now.Date()
 	endY, endM, endD := after.Date()
 	holder := M{
-		"${lessor}":           "香樟有限公司",
+		"${lessor}":           "company",
 		"${lessorID}":         "915201903470159141",
-		"${lessorName}":       "香樟",
-		"${lessorAddress}":    "香樟Address",
+		"${lessorName}":       "tree",
+		"${lessorAddress}":    "tree address",
 		"${lessorPhone}":      "15928009057",
-		"${lessee}":           "王二",
+		"${lessee}":           "Mike",
 		"${lesseeID}":         "520103198801011430",
-		"${lesseeAddress}":    "王二Address",
+		"${lesseeAddress}":    "MikeAddress",
 		"${lesseePhone}":      "15928009058",
 		"${apartmentAddress}": "apartment Address",
 		"${roomid}":           "room Name",
@@ -73,7 +92,7 @@ func TestCreateContractFromTemplate(t *testing.T) {
 		"${paystay}":          1,
 		"${date}":             fmt.Sprintf("%d-%02d-%02d", beginY, beginM, beginD),
 	}
-	tRsp, err := cli.CreateTemplateContract("合同", "testContract123", "92130", tokRsp.Value.Token, false, holder)
+	tRsp, err := cli.CreateTemplateContract("Contract", "testContract123", "92130", tokRsp.Value.Token, false, holder)
 	if err != nil {
 		t.Fatal(err)
 	}

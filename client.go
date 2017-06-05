@@ -68,8 +68,8 @@ func NewClient(cfg Config) *Client {
 	}
 }
 
-// AuthIDCard authenticates ID card number and name via YunHeTong service.
-func (c *Client) AuthIDCard(idNum, idName string, portrait bool) (*AuthResponse, error) {
+// AuthRealName authenticates ID number and name via YunHeTong service.
+func (c *Client) AuthRealName(idNum, idName string, portrait bool) (*AuthResponse, error) {
 	reqType := "1"
 	if portrait {
 		reqType = "2"
@@ -99,9 +99,61 @@ func (c *Client) AuthIDCard(idNum, idName string, portrait bool) (*AuthResponse,
 
 	rsp := ret.(*AuthResponse)
 
-	if err = checkAuthErr(rsp.Code, rsp.Message, rsp.Success); err != nil {
+	if err = checkAuthErr(rsp.Code, rsp.Msg, rsp.Success); err != nil {
 		return nil, err
 	}
+
+	return rsp, nil
+}
+
+func (c *Client) AuthRealNameBank(idNum, idName, bankCard, mobile string) (*AuthResponse, error) {
+	reqType := "3"
+	p := authParams{
+		IDNo:       idNum,
+		IDName:     idName,
+		BankCardNo: bankCard,
+	}
+
+	if mobile != "" {
+		reqType = "4"
+		p.Mobile = mobile
+	}
+
+	paramMap, err := toMap(p, map[string]string{
+		"key":            c.config.AuthID,
+		"value":          c.config.AuthPWD,
+		"rcaRequestType": reqType,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	ret, err := httpRequest(c, p.URI(), paramMap, nil, func() interface{} {
+		return &AuthResponse{}
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	rsp := ret.(*AuthResponse)
+
+	if err = checkAuthErr(rsp.Code, rsp.Msg, rsp.Success); err != nil {
+		return nil, err
+	}
+
+	info := struct {
+		Message string `json:"message"`
+		Status  string `json:"status"`
+	}{}
+
+	if err = json.Unmarshal([]byte(rsp.Data), &info); err != nil {
+		return nil, err
+	}
+
+	rsp.Message = info.Message
+	rsp.Status = info.Status
 
 	return rsp, nil
 }
@@ -556,7 +608,6 @@ func httpRequest(c *Client, uri string, paramMap map[string]string, fileData []b
 	if strings.Contains(uri, "authentication") {
 		apiURL = fmt.Sprintf("%s%s", c.config.AuthGateway, uri)
 	}
-	fmt.Println("API URL", apiURL)
 
 	var data []byte
 	var err error
@@ -619,8 +670,6 @@ func (c *Client) doHTTPRequest(apiURL string, paramMap map[string]string) ([]byt
 	for k, v := range paramMap {
 		formData.Add(k, v)
 	}
-
-	fmt.Println(formData.Encode())
 
 	req, err := http.NewRequest(http.MethodPost, apiURL, strings.NewReader(formData.Encode()))
 	if err != nil {

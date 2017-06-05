@@ -1,8 +1,10 @@
 package goyht
 
 type authParams struct {
-	IDNo   string `param:"idNo"`
-	IDName string `param:"idName"`
+	IDNo       string `param:"idNo"`
+	IDName     string `param:"idName"`
+	BankCardNo string `param:"bankCardNo"`
+	Mobile     string `param:"mobile"`
 }
 
 func (p authParams) URI() string {
@@ -12,12 +14,11 @@ func (p authParams) URI() string {
 // AuthResponse represents the response returned.
 type AuthResponse struct {
 	Code    int    `json:"code"`
-	Message string `json:"msg"`
+	Msg     string `json:"msg"`
 	Success bool   `json:"success"`
-	Data    struct {
-		Status  string `json:"status"`
-		IDPhoto string `json:"id_photo"`
-	} `json:"data"`
+	Data    string `json:"data"`
+	Message string
+	Status  string
 }
 
 type addUserParams struct {
