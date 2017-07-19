@@ -570,17 +570,28 @@ func (c *Client) DownloadContract(contractID, token string) ([]byte, error) {
 
 // AsyncNotifyResult represents the result returned from YunHeTong service.
 type AsyncNotifyResult struct {
-	Content      string            `json:"content"`
-	NoticeType   string            `json:"noticeType"`
-	NoticeParams string            `json:"noticeParams"`
-	InfoMap      map[string]string `json:"map"`
+	Content      string                 `json:"content"`
+	NoticeType   int                    `json:"noticeType"`
+	NoticeParams string                 `json:"noticeParams"`
+	InfoMap      map[string]interface{} `json:"map"`
 }
 
 // AsyncNotify returns asynchronous notification from YunHeTong service.
 func (c *Client) AsyncNotify(req *http.Request) (*AsyncNotifyResult, error) {
 	defer req.Body.Close()
+	bodyBytes, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	tmp, err := url.QueryUnescape(string(bodyBytes)) // url decode as YHT notification is url encoded
+	if err != nil {
+		return nil, err
+	}
+	jsonStr := strings.Replace(tmp, "notice=", "", -1) // remove "notice=" segment as it is not json format
 	result := &AsyncNotifyResult{}
-	if err := json.NewDecoder(req.Body).Decode(result); err != nil {
+	err = json.Unmarshal([]byte(jsonStr), result)
+	if err != nil {
 		return nil, err
 	}
 	return result, nil
