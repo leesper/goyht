@@ -103,6 +103,18 @@ func (c *Client) AuthRealName(idNum, idName string, portrait bool) (*AuthRespons
 		return nil, err
 	}
 
+	info := struct {
+		Message string `json:"message"`
+		Status  string `json:"status"`
+	}{}
+
+	if err = json.Unmarshal([]byte(rsp.Data), &info); err != nil {
+		return nil, err
+	}
+
+	rsp.Message = info.Message
+	rsp.Status = info.Status
+
 	return rsp, nil
 }
 
