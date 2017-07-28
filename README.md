@@ -1,5 +1,6 @@
 # goyht
-Golang SDK for [YunHeTong](http://sdk.yunhetong.com/)
+
+Golang SDK for [YunHeTong](http://sdk.yunhetong.com/)，详细API文档，请阅读[Documentation](https://github.com/leesper/goyht/blob/master/Documentation.md)
 
 # 一. 用户相关接口
 
