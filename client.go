@@ -623,6 +623,7 @@ func (c *Client) AnswerAsyncNotify(rsp bool, msg string) string {
 }
 
 func httpRequest(c *Client, uri string, paramMap map[string]string, fileData []byte, factory func() interface{}) (interface{}, error) {
+	fmt.Printf("params: %#v\n", paramMap)
 	if token, ok := paramMap["token"]; ok {
 		delete(paramMap, "token")
 		uri = fmt.Sprintf("%s?token=%s", uri, token)
